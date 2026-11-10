@@ -105,6 +105,7 @@ Fresha's official ChatGPT and Claude integrations are customer-facing: they show
 
 - [Fresha on Cotlet.dev](https://cotlet.dev/integrations/fresha-api-mcp-server?utm_source=github&utm_medium=readme&utm_campaign=fresha&utm_content=find)
 - [PyPI package fresha-mcp](https://pypi.org/project/fresha-mcp/)
+- [Odel](https://odel.app/modules/cotlet/fresha)
 - [Step-by-step guide (PDF) on Internet Archive](https://archive.org/details/cotlet-connect-fresha-to-ai-agents-guide)
 
 ## Also works with
