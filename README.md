@@ -1,32 +1,73 @@
-# How to connect Fresha to Claude Code, ChatGPT and any AI agent
+# Fresha API integration and MCP server: connect Fresha to ChatGPT, Claude and any AI agent
 
-**Yes, Claude, ChatGPT and other AI agents can work in your Fresha account.** Fresha's official ChatGPT and Claude apps help customers find and book appointments, not run your business. Cotlet.dev connects your own signed-in Fresha account to any AI agent, so the AI books, reschedules and looks up clients for you.
+Fresha API integration and MCP server, unofficial, by Cotlet. Your AI works in your own signed-in Fresha account: the calendar, appointments, clients, client notes, sales, team pay reports and services, on the same screens your login opens. Cotlet has 17 ready Fresha tools for AI agents, and the Cloud Browser does the rest. No developer and no Fresha API key needed. Cotlet is independent and is not affiliated with Fresha.
 
-## What you can ask
+**Does Fresha have an API or an MCP server?** Fresha has no public API, no developer portal and no webhooks for businesses (checked 22 Nov 2026). Its paid Data connector add-on copies data to analytics tools. Fresha's ChatGPT and Claude apps and its public MCP server, launched in August 2026, are for clients who search and book, not for running your business. Fresha has no Zapier app; it syncs with Xero and QuickBooks.
 
-> Book Maria Lopez for a gel manicure with Chloe on Thursday at 11 am.
+## What salon, barbershop and spa owners ask their AI to do in Fresha
 
-> Move all of Tom's Monday appointments to Wednesday at the same times.
+| Job | Ask your AI | Make it repeat |
+|---|---|---|
+| Tomorrow's bookings | "Who is booked tomorrow, per team member, and where are the gaps?" | Every evening |
+| Morning summary | "Summarize new bookings, cancellations and no-shows since yesterday." | Every morning |
+| Lapsed clients | "Find clients who have not booked for 90 days and draft a win-back message for each. Send nothing yet." | Weekly |
+| Fill a cancelled slot | "Tomorrow's 11:00 cancelled. List waitlist clients who could take it and draft a message to the first one." | When a slot opens |
+| Client notes | "Add these notes from today's appointments to each client's profile. Show me before you save." | After each day |
+| Marketplace fee check | "List this month's new clients charged the marketplace fee, with how they booked, so I can check the charges." | Monthly |
+| Team pay | "Run the Pay Summary report for last week and total hours, services and tips per team member." | Every week |
+| Accounting export | "Download this month's sales and payments summary for my accountant." | Monthly |
+| Sales and clients to a spreadsheet | "Export this month's appointments, sales and new clients to a spreadsheet." | Daily or monthly |
+| Bulk price change | "Raise all colour services by 5% and show me the new prices before you save." | When prices change |
+| Import from an old system | "Import the clients in this CSV from my old booking system." | Once |
+| Leaving Fresha | "Download my clients, appointments and sales before I move." | Once |
 
-> How busy are we next week? Show which team member has the most free slots.
+Your AI asks you before it sends, books, cancels or changes anything. Payments and refunds stay in your hands: Cotlet refuses payments.
 
-> Which clients haven't visited in 60 days? List them with their last service and phone number.
+## Your own Fresha API, built with Cotlet
 
-> Add a note to Priya Shah's client profile: allergic to latex, prefers afternoon slots.
+Fresha gives businesses no public API. With Cotlet you build your own: your AI does the job once in your Cloud Browser, you save it as an endpoint, and you call it from Google Sheets, Power BI, GoHighLevel, Klaviyo, Mailchimp, n8n, Make, Zapier, your own code.
+
+Examples you can build in a few minutes (none of them exists until you build it):
+
+| Endpoint you build | What it returns or does |
+|---|---|
+| `bookings-for-day` | appointments for a date, with client, service, team member and time |
+| `new-bookings` | bookings, cancellations and no-shows since a date |
+| `lapsed-clients` | clients with no booking for a number of days |
+| `open-slots` | free slots per team member for a date |
+| `sales-summary` | sales, payments and tips for a period |
+| `team-pay-summary` | hours, services and tips per team member for a period |
+| `clients-export` | clients with contact details, first visit and last visit |
+| `new-clients-source` | new clients in a period with how they booked |
+| `add-client-note` | adds a note to a client's profile (writes only after you allow it) |
+| `book-appointment` | books an appointment for a client and service (writes only after you allow it) |
+
+Call it with your Cotlet API key, JSON in and JSON out:
+
+```bash
+curl -X POST https://cotlet.dev/api/v1/custom/bookings-for-day \
+  -H "Authorization: Bearer $COTLET_API_KEY" -H "Content-Type: application/json" -d '{}'
+```
+
+Limits: one call runs up to 90 seconds, writes wait for your consent, payments are blocked. Start here: https://cotlet.dev/app/custom-api/new?app=fresha
 
 ## Connect in 2 minutes
 
-Get your API key at https://cotlet.dev/app and export it as `COTLET_API_KEY`.
+Sign up at https://cotlet.dev, sign in to Fresha once in your Cloud Browser, then add Cotlet to your AI.
+
+### Claude
+
+Settings → Connectors → Add custom connector, paste `https://cotlet.dev/mcp/v1` and sign in with Cotlet.dev.
+
+### ChatGPT
+
+Open Plugins in ChatGPT, choose Create as a plugin, paste `https://cotlet.dev/mcp/v1` and sign in with Cotlet.dev. No API key needed.
 
 ### Claude Code
 
 ```bash
 claude mcp add --transport http cotlet https://cotlet.dev/mcp/v1 --header "Authorization: Bearer $COTLET_API_KEY"
 ```
-
-### ChatGPT
-
-Settings → Apps → add connector URL `https://cotlet.dev/mcp/v1`, then sign in with Cotlet.dev. No API key needed.
 
 ### Cursor
 
@@ -83,62 +124,62 @@ python3 fresha_agent.py tools     # list Cotlet.dev tools
 python3 fresha_agent.py serve     # start the stdio MCP server (same as no argument)
 ```
 
-## Questions from Fresha users
+## Questions from Fresha business owners
+**Can ChatGPT or Claude read my Fresha calendar?**
 
-**Does Fresha have an API or data connector?**
+Fresha's own ChatGPT and Claude apps are for clients who book. With Cotlet, ChatGPT and Claude work in your own business account: they read your calendar, clients and sales, and tell you who is booked tomorrow.
 
-You don't need one. Cotlet.dev works in your own signed-in Fresha account, so your AI agent can read and change appointments and client records without a Fresha API key.
+**Does Fresha work with Zapier or Make?**
 
-**How do I connect Fresha to ChatGPT?**
+Fresha has no Zapier app and no public API. With Cotlet you build your own Fresha endpoints, such as `new-bookings` or `clients-export`, and call them from Zapier, Make or n8n.
 
-Fresha's own ChatGPT app is for customers finding appointments. To manage your business, add Cotlet.dev as an app in ChatGPT (Settings → Apps, connector URL `https://cotlet.dev/mcp/v1`), sign in to Fresha once in your Cotlet.dev Cloud Browser, and ask ChatGPT in plain words. No code and no Fresha API key.
+**How do I connect Fresha to GoHighLevel?**
 
-**Is there a way to use Claude with Fresha?**
+Call your `new-bookings` endpoint from a GoHighLevel or n8n workflow on a schedule, so new bookings, cancellations and completed appointments update your contacts.
 
-Yes. In Claude Code run the one-line `claude mcp add` command above; in the Claude app add `https://cotlet.dev/mcp/v1` as a custom connector. Claude then works in your own Fresha account, not just the customer booking connector.
+**How do I get Fresha sales and client data into Google Sheets or Power BI every day?**
 
-**Is there a Fresha MCP server?**
+Build `sales-summary` and `clients-export` endpoints once, then load them into Google Sheets or Power BI on a schedule.
 
-Fresha's official ChatGPT and Claude integrations are customer-facing: they show availability, prices and venues, then send people to Fresha to book. Cotlet.dev is a hosted MCP server that works in your Fresha business account for you, 24/7, with Claude, ChatGPT, Cursor, Codex, n8n, Make and Zapier.
+**How do I connect Fresha to Klaviyo or Mailchimp?**
+
+A `clients-export` or `new-bookings` endpoint feeds Klaviyo or Mailchimp, so clients who booked get your emails without a manual export.
+
+**Can AI fill a cancelled slot from my waitlist?**
+
+Your AI lists who could take the slot and drafts the message. It books only after you say yes.
+
+**Can AI check which clients I paid the marketplace fee for?**
+
+It lists the new clients charged the fee in a period, with how they booked, so you can check each charge with Fresha.
+
+**How do I export all my Fresha data every month as a backup?**
+
+Your AI downloads every report and list your login can export: clients, appointments and sales. A `clients-export` endpoint can run it on a schedule.
+
+**I'm leaving Fresha. How do I take my clients with me?**
+
+Your AI exports your client list, appointments and sales your login can see, as spreadsheets for your new system.
+
+**Is Cotlet affiliated with Fresha?**
+
+No. Cotlet is independent and not affiliated with Fresha.
 
 ## Find it on
 
-- [Fresha on Cotlet.dev](https://cotlet.dev/integrations/fresha-api-mcp-server?utm_source=github&utm_medium=readme&utm_campaign=fresha&utm_content=find)
+- [Fresha MCP server on Cotlet.dev](https://cotlet.dev/integrations/fresha-api-mcp-server?utm_source=github&utm_medium=readme&utm_campaign=fresha&utm_content=find)
+- [Fresha API with Cotlet](https://cotlet.dev/integrations/api/fresha?utm_source=github&utm_medium=readme&utm_campaign=fresha&utm_content=find)
+- [Does Fresha have an API or MCP server?](https://cotlet.dev/api-status/fresha?utm_source=github&utm_medium=readme&utm_campaign=fresha&utm_content=find)
 - [PyPI package fresha-mcp](https://pypi.org/project/fresha-mcp/)
-- [Odel](https://odel.app/modules/cotlet/fresha)
-- [mcpbeat](https://mcpbeat.com/mcp-servers/cotlet/fresha/)
-- [Step-by-step guide (PDF) on Internet Archive](https://archive.org/details/cotlet-connect-fresha-to-ai-agents-guide)
 
-## Also works with
+## More salon, spa and booking apps on Cotlet
 
-- [Mangomint MCP](https://github.com/cotlet-connect/mangomint-mcp)
-- [Wanderlog MCP](https://github.com/cotlet-connect/wanderlog-mcp)
-- [SmugMug MCP](https://github.com/cotlet-connect/smugmug-mcp)
-- [Garmin Connect MCP](https://github.com/cotlet-connect/garmin-mcp)
-- [Housecall Pro MCP](https://github.com/cotlet-connect/housecall-pro-mcp)
-- [Medium MCP](https://github.com/cotlet-connect/medium-mcp)
-- [Crexi MCP](https://github.com/cotlet-connect/crexi-mcp)
-- [DistroKid MCP](https://github.com/cotlet-connect/distrokid-mcp)
-- [LinkedIn MCP](https://github.com/cotlet-connect/linkedin-mcp)
-- [EstimateOne MCP](https://github.com/cotlet-connect/estimateone-mcp)
-- [Google Search Console MCP](https://github.com/cotlet-connect/google-search-console-mcp)
-- [Lichess MCP](https://github.com/cotlet-connect/lichess-mcp)
-- [Strava MCP](https://github.com/cotlet-connect/strava-mcp)
-- [StreamElements MCP](https://github.com/cotlet-connect/streamelements-mcp)
-- [Meetup MCP](https://github.com/cotlet-connect/meetup-mcp)
-- [AccuRanker MCP](https://github.com/cotlet-connect/accuranker-mcp)
-- [GetYourGuide MCP](https://github.com/cotlet-connect/getyourguide-mcp)
-- [Idealista MCP](https://github.com/cotlet-connect/idealista-mcp)
-- [Riverside MCP](https://github.com/cotlet-connect/riverside-mcp)
-- [Udemy MCP](https://github.com/cotlet-connect/udemy-mcp)
-- [Faire MCP](https://github.com/cotlet-connect/faire-mcp)
-- [Buildertrend MCP](https://github.com/cotlet-connect/buildertrend-mcp)
 - [Booksy MCP](https://github.com/cotlet-connect/booksy-mcp)
-- [BookingKoala MCP](https://github.com/cotlet-connect/bookingkoala-mcp)
-- [All apps connected through Cotlet.dev](https://github.com/cotlet-connect)
-
----
-
-More: https://cotlet.dev/integrations/fresha-api-mcp-server?utm_source=github&utm_medium=readme&utm_campaign=fresha
-
-Start free: https://cotlet.dev/signup?app=fresha&utm_source=github&utm_medium=readme&utm_campaign=fresha
+- [GlossGenius MCP](https://github.com/cotlet-connect/glossgenius-mcp)
+- [Mangomint MCP](https://github.com/cotlet-connect/mangomint-mcp)
+- [Phorest MCP](https://github.com/cotlet-connect/phorest-mcp)
+- [Zenoti MCP](https://github.com/cotlet-connect/zenoti-mcp)
+- [DaySmart MCP](https://github.com/cotlet-connect/daysmart-mcp)
+- [Acuity Scheduling MCP](https://github.com/cotlet-connect/acuity-scheduling-mcp)
+- [StyleSeat MCP](https://github.com/cotlet-connect/styleseat-mcp)
+- [Salonized MCP](https://github.com/cotlet-connect/salonized-mcp)
